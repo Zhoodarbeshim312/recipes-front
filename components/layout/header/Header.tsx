@@ -4,22 +4,27 @@ import logo from "@/assets/images/logo.svg";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MdLogout } from "react-icons/md";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Hamburger from "hamburger-react";
+
+type User = {
+  token?: string;
+  avatar?: string;
+};
 
 const Header = () => {
   const nav = useRouter();
-  const [user, setUser] = useState<{ token?: string; avatar?: string }>({});
-  const [isOpen, setOpen] = useState<boolean>(false);
 
-  useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
-    setUser(storedUser);
-  }, []);
+  const [user, setUser] = useState<User | null>(() => {
+    if (typeof window === "undefined") return null;
+    return JSON.parse(localStorage.getItem("user") || "null");
+  });
+
+  const [isOpen, setOpen] = useState(false);
 
   const logout = () => {
     localStorage.removeItem("user");
-    setUser({});
+    setUser(null);
     nav.push("/");
   };
 
@@ -34,19 +39,19 @@ const Header = () => {
         />
 
         <nav className="hidden lg:flex gap-5">
-          <Link className="text-[#380202] font-semibold" href={"/categories"}>
+          <Link className="text-[#380202] font-semibold" href="/categories">
             Категории
           </Link>
-          <Link className="text-[#380202] font-semibold" href={"/popular"}>
+          <Link className="text-[#380202] font-semibold" href="/popular">
             Популярные
           </Link>
-          <Link className="text-[#380202] font-semibold" href={"/add"}>
+          <Link className="text-[#380202] font-semibold" href="/add">
             Добавить рецепт
           </Link>
         </nav>
 
         <div className="flex items-center gap-3 lg:gap-5">
-          {user.token ? (
+          {user?.token ? (
             <>
               <Image
                 style={{ border: "2px solid #380202" }}
@@ -76,35 +81,26 @@ const Header = () => {
               </button>
             </>
           )}
+
           <div className="lg:hidden">
             <Hamburger toggled={isOpen} toggle={setOpen} />
           </div>
         </div>
       </div>
+
       {isOpen && (
         <div className="lg:hidden absolute top-full left-0 w-full bg-white shadow-md flex flex-col items-center gap-4 py-4 z-40">
-          <Link
-            className="text-[#380202] font-semibold"
-            href={"/categories"}
-            onClick={() => setOpen(false)}
-          >
+          <Link href="/categories" onClick={() => setOpen(false)}>
             Категории
           </Link>
-          <Link
-            className="text-[#380202] font-semibold"
-            href={"/popular"}
-            onClick={() => setOpen(false)}
-          >
+          <Link href="/popular" onClick={() => setOpen(false)}>
             Популярные
           </Link>
-          <Link
-            className="text-[#380202] font-semibold"
-            href={"/add"}
-            onClick={() => setOpen(false)}
-          >
+          <Link href="/add" onClick={() => setOpen(false)}>
             Добавить рецепт
           </Link>
-          {!user.token && (
+
+          {!user?.token && (
             <>
               <button
                 onClick={() => {
