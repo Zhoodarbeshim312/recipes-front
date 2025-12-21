@@ -1,46 +1,21 @@
 "use client";
+import Lottie from "lottie-react";
 import back from "@/assets/images/authBack.svg";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { MdLogout } from "react-icons/md";
-import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { useRegisterMutation } from "@/redux/api/auth";
+import animationLoader from "@/assets/images/Loading 50 _ Among Us.json";
 const Register = () => {
-  const [name, setName] = useState<string>("");
-  const [lastName, setLastName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [register, { data, error, isLoading }] = useRegisterMutation();
   const nav = useRouter();
-
-  const handleRegister = async () => {
-    if (!name || !lastName || !email || !password || !confirmPassword) {
-      toast.error("Заполните все поля!", { position: "top-center" });
-      return;
-    }
-    if (password !== confirmPassword) {
-      toast.error("Пароли не совпадают!", { position: "top-center" });
-      return;
-    }
-    try {
-      const res = await axios.post("http://localhost:5000/api/auth/register", {
-        name,
-        lastName,
-        email,
-        password,
-      });
-      console.log("Ответ сервера:", res.data);
-      toast.success("Регистрация прошла успешно!", { position: "top-center" });
-      nav.push("/login");
-    } catch (err: any) {
-      console.error(err);
-      toast.error(err.response?.data?.message || "Ошибка регистрации", {
-        position: "top-center",
-      });
-    }
+  const obj = {
+    name: "predator",
+    email: "predator@gmail.com",
+    password: "predator123",
   };
+
   return (
     <section
       style={{
@@ -62,47 +37,49 @@ const Register = () => {
             style={{ border: "2px solid #FF9A31" }}
             type="text"
             placeholder="Имя"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            // value={name}
+            // onChange={(e) => setName(e.target.value)}
             className="bg-white text-[20px] rounded-[10px] px-[20px] w-[300px] h-[50px] border-2 border-[#FF9A31]"
           />
-          <input
-            style={{ border: "2px solid #FF9A31" }}
-            type="text"
-            placeholder="Фамилия"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            className="bg-white text-[20px] rounded-[10px] px-[20px] w-[300px] h-[50px] border-2 border-[#FF9A31]"
-          />
+
           <input
             style={{ border: "2px solid #FF9A31" }}
             type="email"
             placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            // value={email}
+            // onChange={(e) => setEmail(e.target.value)}
             className="bg-white text-[20px] rounded-[10px] px-[20px] w-[300px] h-[50px] border-2 border-[#FF9A31]"
           />
           <input
             style={{ border: "2px solid #FF9A31" }}
             type="password"
             placeholder="Пароль"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            // value={password}
+            // onChange={(e) => setPassword(e.target.value)}
             className="bg-white text-[20px] rounded-[10px] px-[20px] w-[300px] h-[50px] border-2 border-[#FF9A31]"
           />
           <input
             style={{ border: "2px solid #FF9A31" }}
             type="password"
             placeholder="Подтвердите пароль"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            // value={confirmPassword}
+            // onChange={(e) => setConfirmPassword(e.target.value)}
             className="bg-white text-[20px] rounded-[10px] px-[20px] w-[300px] h-[50px] border-2 border-[#FF9A31]"
           />
           <button
-            onClick={handleRegister}
-            className="bg-[#FF9A31] text-white rounded-[10px] text-[20px] px-[20px] py-[10px] w-[300px]"
+            onClick={() => register(obj)}
+            disabled={isLoading}
+            className="bg-[#FF9A31] text-white rounded-[10px] text-[20px] px-[10px] py-[10px] w-[300px] h-[50px] flex items-center justify-center transition-opacity duration-150"
           >
-            Зарегистрироваться
+            {isLoading ? (
+              <Lottie
+                animationData={animationLoader}
+                loop
+                className="w-[150%] h-[350%]"
+              />
+            ) : (
+              "Зарегистрироваться"
+            )}
           </button>
 
           <p className="flex items-center gap-[5px] text-[18px]">
