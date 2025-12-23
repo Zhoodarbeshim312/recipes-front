@@ -41,8 +41,6 @@ const Header = () => {
           className="cursor-pointer"
           onClick={() => nav.push("/")}
         />
-
-        {/* Desktop nav */}
         <nav className="hidden lg:flex gap-5">
           <Link className="text-[#380202] font-semibold" href="/categories">
             Категории
@@ -54,7 +52,6 @@ const Header = () => {
             Добавить рецепт
           </Link>
         </nav>
-
         <div className="flex items-center gap-3 lg:gap-5">
           {user?.token ? (
             <>
