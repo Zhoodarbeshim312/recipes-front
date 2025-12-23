@@ -5,7 +5,7 @@ import {
 } from "@reduxjs/toolkit/query/react";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:5001/api/v1",
+  baseUrl: "http://localhost:5001/api",
 });
 
 const baseQueryExtended: BaseQueryFn = async (args, api, extraOptions) => {

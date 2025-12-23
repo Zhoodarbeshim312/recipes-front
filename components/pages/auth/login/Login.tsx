@@ -1,8 +1,34 @@
 "use client";
+import { useState } from "react";
 import Lottie from "lottie-react";
-import animationLoader from "@/assets/images/loading-animation.json";
 import back from "@/assets/images/authBack.svg";
+import { useRouter } from "next/navigation";
+import { MdLogout } from "react-icons/md";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useLoginMutation } from "@/redux/api/auth";
+import animationLoader from "@/assets/images/Loading 50 _ Among Us.json";
 
+const Login = () => {
+  const nav = useRouter();
+  const [loginUser, { isLoading }] = useLoginMutation();
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  const setField = (field: string, value: string) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleLogin = async () => {
+    try {
+      await loginUser(form).unwrap();
+      toast.success("Успешный вход");
+      nav.push("/");
+    } catch {
+      toast.error("Ошибка входа");
+    }
   };
 
   return (
@@ -18,44 +44,40 @@ import back from "@/assets/images/authBack.svg";
         <div className="flex flex-col items-center gap-[20px]">
           <button
             onClick={() => nav.push("/")}
-            className="text-[30px] absolute top-[20%] right-[10%] text-white"
+            className="text-[30px] absolute top-[5%] right-[10%] text-white"
           >
             <MdLogout />
           </button>
-
           <input
-            style={{ border: "2px solid #FF9A31" }}
             value={form.email}
             onChange={(e) => setField("email", e.target.value)}
-            type="text"
+            type="email"
             placeholder="Email"
-
+            className="bg-white text-[20px] rounded-[10px] px-[20px] w-[300px] h-[50px] border-2 border-[#FF9A31]"
+          />
           <input
-            style={{ border: "2px solid #FF9A31" }}
             value={form.password}
             onChange={(e) => setField("password", e.target.value)}
             type="password"
             placeholder="Пароль"
-
+            className="bg-white text-[20px] rounded-[10px] px-[20px] w-[300px] h-[50px] border-2 border-[#FF9A31]"
           />
-
           <button
-
+            onClick={handleLogin}
+            className="bg-[#FF9A31] text-[20px] rounded-[10px] px-[20px] w-[300px] h-[50px] flex items-center justify-center"
           >
             {isLoading ? (
               <Lottie
                 animationData={animationLoader}
                 loop
-                autoplay
-                style={{ width: 36, height: 36 }}
+                className="w-[100px] h-[190px]"
               />
             ) : (
               "Войти"
             )}
           </button>
-
-          <p className="flex flex-col items-center gap-[5px] text-[18px]">
-            Вы впервые на сайте?
+          <p className="flex items-center gap-[5px] text-[18px]">
+            Нет аккаунта?
             <span
               onClick={() => nav.push("/register")}
               className="text-[#FF9A31] cursor-pointer"
