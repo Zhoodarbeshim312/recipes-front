@@ -22,7 +22,9 @@ const Header = () => {
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      setTimeout(() => {
+        setUser(JSON.parse(storedUser));
+      }, 0);
     }
   }, []);
 

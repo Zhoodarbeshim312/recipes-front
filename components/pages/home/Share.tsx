@@ -1,7 +1,10 @@
+"use client";
 import Image from "next/image";
 import img from "@/assets/images/shareImg.svg";
+import { useRouter } from "next/navigation";
 
 const Share = () => {
+  const nav = useRouter();
   return (
     <section className="py-[40px]">
       <div className="container">
@@ -52,6 +55,7 @@ const Share = () => {
             </p>
 
             <button
+              onClick={() => nav.push("/add")}
               className="
                 text-[25px] bg-[#714424] rounded-[10px] py-[5px] px-[26px] text-white
                 md:text-[22px]
