@@ -1,10 +1,11 @@
 "use client";
+
 import Image from "next/image";
 import logo from "@/assets/images/logo.svg";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MdLogout } from "react-icons/md";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Hamburger from "hamburger-react";
 
 type User = {
@@ -15,12 +16,15 @@ type User = {
 const Header = () => {
   const nav = useRouter();
 
-  const [user, setUser] = useState<User | null>(() => {
-    if (typeof window === "undefined") return null;
-    return JSON.parse(localStorage.getItem("user") || "null");
-  });
-
+  const [user, setUser] = useState<User | null>(null);
   const [isOpen, setOpen] = useState(false);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
 
   const logout = () => {
     localStorage.removeItem("user");
@@ -32,12 +36,13 @@ const Header = () => {
     <header className="py-5 relative bg-white z-50">
       <div className="container mx-auto px-4 flex justify-between items-center">
         <Image
-          onClick={() => nav.push("/")}
-          className="cursor-pointer"
           src={logo}
           alt="logo"
+          className="cursor-pointer"
+          onClick={() => nav.push("/")}
         />
 
+        {/* Desktop nav */}
         <nav className="hidden lg:flex gap-5">
           <Link className="text-[#380202] font-semibold" href="/categories">
             Категории
@@ -54,12 +59,12 @@ const Header = () => {
           {user?.token ? (
             <>
               <Image
-                style={{ border: "2px solid #380202" }}
-                className="rounded-full"
+                unoptimized
                 width={50}
                 height={50}
                 src={user.avatar || "/default-avatar.png"}
                 alt="avatar"
+                className="rounded-full border-2 border-[#380202]"
               />
               <button onClick={logout} className="text-2xl text-[#380202]">
                 <MdLogout />
@@ -69,25 +74,27 @@ const Header = () => {
             <>
               <button
                 onClick={() => nav.push("/login")}
-                className="max-[1024px]:hidden min-[1024px]:flex text-white font-semibold bg-[#714424] py-1 px-4 rounded-lg"
+                className="hidden lg:flex text-white font-semibold bg-[#714424] py-1 px-4 rounded-lg"
               >
                 Вход
               </button>
               <button
                 onClick={() => nav.push("/register")}
-                className="max-[1024px]:hidden min-[1024px]:flex text-white font-semibold bg-[#714424] py-1 px-4 rounded-lg"
+                className="hidden lg:flex text-white font-semibold bg-[#714424] py-1 px-4 rounded-lg"
               >
                 Регистрация
               </button>
             </>
           )}
 
+          {/* Mobile hamburger */}
           <div className="lg:hidden">
             <Hamburger toggled={isOpen} toggle={setOpen} />
           </div>
         </div>
       </div>
 
+      {/* Mobile menu */}
       {isOpen && (
         <div className="lg:hidden absolute top-full left-0 w-full bg-white shadow-md flex flex-col items-center gap-4 py-4 z-40">
           <Link href="/categories" onClick={() => setOpen(false)}>
