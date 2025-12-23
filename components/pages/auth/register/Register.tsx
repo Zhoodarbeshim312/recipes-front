@@ -70,7 +70,11 @@ const Register = () => {
             className="bg-[#FF9A31] text-[20px] rounded-[10px] px-[20px] w-[300px] h-[50px] flex items-center justify-center disabled:opacity-60"
           >
             {isLoading ? (
-              <Lottie animationData={animationLoader} loop />
+              <Lottie
+                animationData={animationLoader}
+                loop
+                className="w-[100px]"
+              />
             ) : (
               "Зарегистрироваться"
             )}
