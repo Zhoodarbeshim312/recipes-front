@@ -60,8 +60,6 @@ const Header = () => {
           className="cursor-pointer"
           onClick={() => nav.push("/")}
         />
-
-        {/* Desktop nav */}
         <nav className="hidden lg:flex gap-5">
           <p
             onClick={scroll1}
@@ -82,7 +80,6 @@ const Header = () => {
             Добавить рецепт
           </p>
         </nav>
-
         <div className="flex items-center gap-3 lg:gap-5">
           {user?.token ? (
             <>
