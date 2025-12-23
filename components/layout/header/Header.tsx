@@ -32,8 +32,27 @@ const Header = () => {
     nav.push("/");
   };
 
+  const scroll1 = () => {
+    window.scrollTo({
+      top: 1200,
+      behavior: "smooth",
+    });
+  };
+  const scroll2 = () => {
+    window.scrollTo({
+      top: 550,
+      behavior: "smooth",
+    });
+  };
+  const scroll3 = () => {
+    window.scrollTo({
+      top: 2550,
+      behavior: "smooth",
+    });
+  };
+
   return (
-    <header className="py-5 relative bg-white z-50">
+    <header className="py-5 relative bg-white z-50 sticky top-0">
       <div className="container mx-auto px-4 flex justify-between items-center">
         <Image
           src={logo}
@@ -44,15 +63,24 @@ const Header = () => {
 
         {/* Desktop nav */}
         <nav className="hidden lg:flex gap-5">
-          <Link className="text-[#380202] font-semibold" href="/categories">
+          <p
+            onClick={scroll1}
+            className="cursor-pointer text-[#380202] font-semibold"
+          >
             Категории
-          </Link>
-          <Link className="text-[#380202] font-semibold" href="/popular">
+          </p>
+          <p
+            onClick={scroll2}
+            className="cursor-pointer text-[#380202] font-semibold"
+          >
             Популярные
-          </Link>
-          <Link className="text-[#380202] font-semibold" href="/add">
+          </p>
+          <p
+            onClick={scroll3}
+            className="cursor-pointer text-[#380202] font-semibold"
+          >
             Добавить рецепт
-          </Link>
+          </p>
         </nav>
 
         <div className="flex items-center gap-3 lg:gap-5">
